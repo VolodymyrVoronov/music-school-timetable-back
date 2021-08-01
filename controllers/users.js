@@ -49,7 +49,6 @@ export const registration = async (req, res) => {
       secondName,
       login,
       password: hashedPassword,
-      fullName,
     });
 
     const token = jwt.sign({ login: result.login, id: result._id }, process.env.SECRET_TOKEN, { expiresIn: "1h" });
