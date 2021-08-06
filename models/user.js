@@ -8,6 +8,6 @@ const userSchema = mongoose.Schema({
   id: { type: String },
 });
 
-const user = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-export default user;
+export default User;
