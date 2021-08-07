@@ -30,28 +30,36 @@ export const getTeachersStudents = async (req, res) => {
 };
 
 export const deleteStudent = async (req, res) => {
-  const { id: _id } = req.params;
+  try {
+    const { id: _id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return res.status(404).send(`No student with that id`);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send(`No student with that id`);
+    }
+
+    await Student.findByIdAndRemove(_id);
+
+    res.json({ message: `Student deleted successfully` });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
-
-  await Student.findByIdAndRemove(_id);
-
-  res.json({ message: `Student deleted successfully` });
 };
 
 export const updateStudent = async (req, res) => {
-  const { id: _id } = req.params;
-  const student = req.body;
+  try {
+    const { id: _id } = req.params;
+    const student = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return res.status(404).send(`No Student with that id`);
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send(`No Student with that id`);
+    }
+
+    const updatedStudent = await Student.findByIdAndUpdate(_id, student, {
+      new: true,
+    });
+
+    res.json(updatedStudent);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
-
-  const updatedStudent = await Student.findByIdAndUpdate(_id, student, {
-    new: true,
-  });
-
-  res.json(updatedStudent);
 };
