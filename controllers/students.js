@@ -28,3 +28,15 @@ export const getTeachersStudents = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const deleteStudent = async (req, res) => {
+  const { id: _id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(404).send(`No student with that id`);
+  }
+
+  await Student.findByIdAndRemove(_id);
+
+  res.json({ message: `Student deleted successfully` });
+};
