@@ -40,3 +40,18 @@ export const deleteStudent = async (req, res) => {
 
   res.json({ message: `Student deleted successfully` });
 };
+
+export const updateStudent = async (req, res) => {
+  const { id: _id } = req.params;
+  const student = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(404).send(`No Student with that id`);
+  }
+
+  const updatedStudent = await Student.findByIdAndUpdate(_id, student, {
+    new: true,
+  });
+
+  res.json(updatedStudent);
+};
