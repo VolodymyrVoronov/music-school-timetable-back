@@ -12,8 +12,22 @@ export const addNewTimetable = async (req, res) => {
   try {
     await newTimetable.save();
 
-    res.status(201).json(newTimetable);
+    res.status(200).json(newTimetable);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getTimetable = async (req, res) => {
+  const teacherId = req.userId;
+
+  try {
+    const timetables = await Timetable.find();
+
+    const filteredTimetable = timetables.filter((timetable) => (timetable.teacher = teacherId));
+
+    res.status(200).json(filteredTimetable);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };

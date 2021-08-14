@@ -21,7 +21,9 @@ export const getTeachersStudents = async (req, res) => {
 
   try {
     const students = await Student.find();
-    const filteredStudents = students.filter((student) => String(student.teacher) === String(teachertId)).sort((a, b) => a.firstName.localeCompare(b.firstName));
+    const filteredStudents = students
+      .filter((student) => String(student.teacher) === String(teachertId))
+      .sort((a, b) => a.firstName.localeCompare(b.firstName));
 
     res.status(200).json(filteredStudents);
   } catch (error) {

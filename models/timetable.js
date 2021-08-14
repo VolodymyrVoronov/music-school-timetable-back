@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const timetableSchema = mongoose.Schema({
   cards: [
     {
-      id: { type: String, default: "" },
+      cardId: { type: String, default: "" },
       order: { type: Number, default: 0 },
       data: {
         lessonStart: { type: String, default: "" },
