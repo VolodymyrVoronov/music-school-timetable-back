@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 
 import userRoutes from "./routes/users.js";
 import studentsRoutes from "./routes/students.js";
+import timetableRoutes from "./routes/timetable.js";
 
 const app = express();
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors());
 
 app.use("/user", userRoutes);
 app.use("/students", studentsRoutes);
+app.use("/timetable", timetableRoutes);
 
 const PORT = process.env.PORT || 5000;
 
