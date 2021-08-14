@@ -5,14 +5,31 @@ import Timetable from "../models/timetable.js";
 export const addNewTimetable = async (req, res) => {
   const timetable = req.body;
 
-  console.log(timetable);
-
   const newTimetable = new Timetable({ ...timetable, teacher: req.userId });
 
   try {
     await newTimetable.save();
 
     res.status(200).json(newTimetable);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const updateTimetable = async (req, res) => {
+  try {
+    const { id: _id } = req.params;
+    const timetable = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).send(`No Timetable with that id`);
+    }
+
+    const updatedTimetable = await Timetable.findByIdAndUpdate(_id, timetable, {
+      new: true,
+    });
+
+    res.json(updatedTimetable);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
