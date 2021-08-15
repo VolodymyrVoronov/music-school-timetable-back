@@ -1,4 +1,4 @@
-To install und run the project
+To install und run the project:
 
 ### `1. npm install`
 
