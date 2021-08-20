@@ -41,8 +41,7 @@ export const getTimetable = async (req, res) => {
   try {
     const timetables = await Timetable.find();
 
-    const filteredTimetable = timetables.filter((timetable) => (timetable.teacher = teacherId));
-
+    const filteredTimetable = timetables.filter((timetable) => timetable.teacher === teacherId);
     res.status(200).json(filteredTimetable);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -50,5 +49,17 @@ export const getTimetable = async (req, res) => {
 };
 
 export const getTeachersTimetable = async (req, res) => {
-  console.log(req.body);
+  const { teacherId, date } = req.body;
+
+  try {
+    const timetables = await Timetable.find();
+
+    const filteredTimetable = timetables
+      .filter((timetable) => timetable.teacher === teacherId)
+      .filter((timetable) => timetable.date === date);
+
+    res.status(200).json(filteredTimetable);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
