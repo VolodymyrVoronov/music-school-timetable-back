@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import Student from "./../models/student.js";
 
+import { NETWORK_STATUS } from "./../const/const.js";
+
 export const addNewStudent = async (req, res) => {
   const student = req.body;
 
@@ -10,9 +12,9 @@ export const addNewStudent = async (req, res) => {
   try {
     await newStudent.save();
 
-    res.status(201).json(newStudent);
+    res.status(NETWORK_STATUS.CREATED).json(newStudent);
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    res.status(NETWORK_STATUS.CONFLICT).json({ message: error.message });
   }
 };
 
@@ -25,9 +27,9 @@ export const getTeachersStudents = async (req, res) => {
       .filter((student) => String(student.teacher) === String(teachertId))
       .sort((a, b) => a.firstName.localeCompare(b.firstName));
 
-    res.status(200).json(filteredStudents);
+    res.status(NETWORK_STATUS.OK).json(filteredStudents);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
 
@@ -36,14 +38,14 @@ export const deleteStudent = async (req, res) => {
     const { id: _id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(404).send(`No student with that id`);
+      return res.status(NETWORK_STATUS.NOT_FOUND).send(`No student with that id`);
     }
 
     await Student.findByIdAndRemove(_id);
 
     res.json({ message: `Student deleted successfully` });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
 
@@ -53,7 +55,7 @@ export const updateStudent = async (req, res) => {
     const student = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(404).send(`No Student with that id`);
+      return res.status(NETWORK_STATUS.NOT_FOUND).send(`No Student with that id`);
     }
 
     const updatedStudent = await Student.findByIdAndUpdate(_id, student, {
@@ -62,6 +64,6 @@ export const updateStudent = async (req, res) => {
 
     res.json(updatedStudent);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };

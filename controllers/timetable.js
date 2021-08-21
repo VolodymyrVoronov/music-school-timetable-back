@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 import Timetable from "../models/timetable.js";
 
+import { NETWORK_STATUS } from "./../const/const.js";
+
 export const addNewTimetable = async (req, res) => {
   const timetable = req.body;
 
@@ -10,9 +12,9 @@ export const addNewTimetable = async (req, res) => {
   try {
     await newTimetable.save();
 
-    res.status(200).json(newTimetable);
+    res.status(NETWORK_STATUS.OK).json(newTimetable);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
 
@@ -22,7 +24,7 @@ export const updateTimetable = async (req, res) => {
     const timetable = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(404).send(`No Timetable with that id`);
+      return res.status(NETWORK_STATUS.NOT_FOUND).send(`No Timetable with that id`);
     }
 
     const updatedTimetable = await Timetable.findByIdAndUpdate(_id, timetable, {
@@ -31,7 +33,7 @@ export const updateTimetable = async (req, res) => {
 
     res.json(updatedTimetable);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
 
@@ -42,9 +44,9 @@ export const getTimetable = async (req, res) => {
     const timetables = await Timetable.find();
 
     const filteredTimetable = timetables.filter((timetable) => timetable.teacher === teacherId);
-    res.status(200).json(filteredTimetable);
+    res.status(NETWORK_STATUS.OK).json(filteredTimetable);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
 
@@ -58,8 +60,8 @@ export const getTeachersTimetable = async (req, res) => {
       .filter((timetable) => timetable.teacher === teacherId)
       .filter((timetable) => timetable.date === date);
 
-    res.status(200).json(filteredTimetable);
+    res.status(NETWORK_STATUS.OK).json(filteredTimetable);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(NETWORK_STATUS.NOT_FOUND).json({ message: error.message });
   }
 };
